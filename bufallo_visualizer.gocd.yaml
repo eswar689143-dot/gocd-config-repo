@@ -3,6 +3,7 @@ pipelines:
     group: markwaveai
     materials:
       git:
+        type: git
         url: https://github.com/eswar689143-dot/markwaveai-demo.git
         branch: main
 
@@ -16,11 +17,9 @@ pipelines:
           jobs:
             build-image:
               tasks:
-                - task:
-                    type: exec
-                    attributes:
-                      command: bash
-                      arguments:
+                - type: exec
+                  command: bash
+                  arguments:
                         - -c
                         - |
                           cd bufallo_visualizer
@@ -32,11 +31,9 @@ pipelines:
           jobs:
             push-image:
               tasks:
-                - task:
-                    type: exec
-                    attributes:
-                      command: bash
-                      arguments:
+                - type: exec
+                  command: bash
+                  arguments:
                         - -c
                         - |
                           echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
@@ -46,11 +43,9 @@ pipelines:
           jobs:
             deploy-container:
               tasks:
-                - task:
-                    type: exec
-                    attributes:
-                      command: bash
-                      arguments:
+                - type: exec
+                  command: bash
+                  arguments:
                         - -c
                         - |
                           docker rm -f $CONTAINER_NAME || true
