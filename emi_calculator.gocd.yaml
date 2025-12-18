@@ -16,35 +16,41 @@ pipelines:
           jobs:
             build-image:
               tasks:
-                - exec:
-                    command: bash
-                  arguments:
-                    - -c
-                    - |
-                      cd emi_calculator
-                      docker build -t $IMAGE_NAME:latest .
+                - task:
+                    type: exec
+                    attributes:
+                      command: bash
+                      arguments:
+                        - -c
+                        - |
+                          cd emi_calculator
+                          docker build -t $IMAGE_NAME:latest .
 
       - push:
           jobs:
             push-image:
               tasks:
-                - exec:
-                    command: bash
-                  arguments:
-                    - -c
-                    - |
-                      echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-                      docker push $IMAGE_NAME:latest
+                - task:
+                    type: exec
+                    attributes:
+                      command: bash
+                      arguments:
+                        - -c
+                        - |
+                          echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+                          docker push $IMAGE_NAME:latest
 
       - deploy:
           jobs:
             deploy-container:
               tasks:
-                - exec:
-                    command: bash
-                  arguments:
-                    - -c
-                    - |
-                      docker rm -f $CONTAINER_NAME || true
-                      docker compose pull
-                      docker compose up -d
+                - task:
+                    type: exec
+                    attributes:
+                      command: bash
+                      arguments:
+                        - -c
+                        - |
+                          docker rm -f $CONTAINER_NAME || true
+                          docker compose pull
+                          docker compose up -d
