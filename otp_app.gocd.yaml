@@ -12,9 +12,9 @@ pipelines:
           jobs:
             deploy-job:
               tasks:
-                - type: exec
+                - exec:
                   command: bash
                   arguments:
                     - -c
                     - |
-                      docker compose up -d otp_app
+                     docker compose up -d otp_app

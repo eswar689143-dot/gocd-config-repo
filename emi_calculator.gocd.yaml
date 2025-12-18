@@ -12,9 +12,9 @@ pipelines:
           jobs:
             deploy-job:
               tasks:
-                - type: exec
-                  command: bash
-                  arguments:
+                - exec:
+                   command: bash
+                   arguments:
                     - -c
                     - |
                       docker compose up -d emi_calculator
