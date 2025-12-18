@@ -1,51 +1,20 @@
 pipelines:
   emi-calculator:
-    group: markwaveai
+    group: apps
     materials:
       git:
         type: git
         url: https://github.com/eswar689143-dot/markwaveai-demo.git
         branch: main
 
-    environment_variables:
-      IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/emi_calculator
-      CONTAINER_NAME: emi_calculator
-      PORT: "8082"
-
     stages:
-      - build:
-          jobs:
-            build-image:
-              tasks:
-                - type: exec
-                  command: bash
-                  arguments:
-                        - -c
-                        - |
-                          cd emi_calculator
-                          docker build -t $IMAGE_NAME:latest .
-
-      - push:
-          jobs:
-            push-image:
-              tasks:
-                - type: exec
-                  command: bash
-                  arguments:
-                        - -c
-                        - |
-                          echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-                          docker push $IMAGE_NAME:latest
-
       - deploy:
           jobs:
-            deploy-container:
+            deploy-job:
               tasks:
                 - type: exec
                   command: bash
                   arguments:
-                        - -c
-                        - |
-                          docker rm -f $CONTAINER_NAME || true
-                          docker compose pull
-                          docker compose up -d
+                    - -c
+                    - |
+                      docker compose up -d emi_calculator
