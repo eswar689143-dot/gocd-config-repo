@@ -1,0 +1,50 @@
+pipelines:
+  otp-app:
+    group: markwaveai
+    materials:
+      git:
+        url: https://github.com/eswar689143-dot/markwaveai-demo.git
+        branch: main
+
+    environment_variables:
+      IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/otp_app
+      CONTAINER_NAME: otp_app
+      PORT: "8083"
+
+    stages:
+      - build:
+          jobs:
+            build-image:
+              tasks:
+                - exec:
+                    command: bash
+                    arguments:
+                      - -c
+                      - |
+                        cd otp_app
+                        docker build -t $IMAGE_NAME:latest .
+
+      - push:
+          jobs:
+            push-image:
+              tasks:
+                - exec:
+                    command: bash
+                    arguments:
+                      - -c
+                      - |
+                        echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+                        docker push $IMAGE_NAME:latest
+
+      - deploy:
+          jobs:
+            deploy-container:
+              tasks:
+                - exec:
+                    command: bash
+                    arguments:
+                      - -c
+                      - |
+                        docker rm -f $CONTAINER_NAME || true
+                        docker compose pull
+                        docker compose up -d
