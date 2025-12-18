@@ -9,12 +9,12 @@ pipelines:
 
     stages:
       - deploy:
-          jobs:
-            deploy-job:
-              tasks:
-                - exec:
-                   command: bash
-                   arguments:
-                    - -c
-                    - |
-                      docker compose up -d emi_calculator
+        jobs:
+          deploy-job:
+            tasks:
+              - exec:
+                  command: bash
+                  arguments:
+                  - -c
+                  - |
+                    docker compose up -d emi_calculator
