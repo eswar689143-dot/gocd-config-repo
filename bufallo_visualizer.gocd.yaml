@@ -16,8 +16,8 @@ pipelines:
           jobs:
             build-image:
               tasks:
-                - type: exec
-                  command: bash
+                - exec:
+                    command: bash
                   arguments:
                     - -c
                     - |
@@ -30,8 +30,8 @@ pipelines:
           jobs:
             push-image:
               tasks:
-                - type: exec
-                  command: bash
+                - exec:
+                    command: bash
                   arguments:
                     - -c
                     - |
@@ -42,8 +42,8 @@ pipelines:
           jobs:
             deploy-container:
               tasks:
-                - type: exec
-                  command: bash
+                - exec:
+                    command: bash
                   arguments:
                     - -c
                     - |
